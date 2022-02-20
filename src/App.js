@@ -47,13 +47,35 @@ filterContact = () => {
     return this.state.contacts.filter(contact => contact.name.toLowerCase().includes(this.state.filter.toLowerCase()))    
 };
 
+    
+componentDidMount() { 
+    const contacts = localStorage.getItem('contacts')
+    console.log(contacts)
+    const parseContacts = JSON.parse(contacts)
+    console.log(parseContacts)
+    
+    
+}
+    
+
+componentDidUpdate(prevProps, prevState) {        
+
+    const { contacts } = this.state
+    if (contacts !== prevState.contacts) { 
+        console.log('Oбновились контакты')
+        localStorage.setItem('contacts', JSON.stringify(contacts))
+    }   
+ };
+    
+    
     render() {
+        const { contacts,filter } = this.state;
         return (<>
             <Container>
             <h1>Phonebook</h1>
-            <ContactForm addContact={this.addContact} contactList={this.state.contacts}/>
+            <ContactForm addContact={this.addContact} contactList={contacts}/>
             <h2>Contacts</h2>
-            <Filter value={this.state.filter} filter={this.filter} />
+            <Filter value={filter} filter={this.filter} />
             <ContactList delContact={this.delContact} contacts={this.filterContact()} />
             </Container>
         </>)
